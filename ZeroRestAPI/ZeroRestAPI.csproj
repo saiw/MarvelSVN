@@ -51,6 +51,7 @@
     <Compile Include="Class\Helper.cs" />
     <Compile Include="HuobiApi.cs" />
     <Compile Include="Class\DefineClass.cs" />
+    <Compile Include="KuCoinRestfulApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

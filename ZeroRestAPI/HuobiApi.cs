@@ -2,54 +2,44 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ZeroRestAPI
 {
-    public class HuobiRestfulApi
+    public class HuobiRestfulApi:AbstractRestful
     {
-        #region HuoBiApi配置信息
-        /// <summary>
-        /// API域名名称
-        /// </summary>
-        public string HoubitHOST = string.Empty;
-        /// <summary>
-        /// HOUST
-        /// </summary>
-        private string HoubitHOSTURL
-        {
-            get { return $"https://" + HoubitHOST; }  //https://api.huobipro.com/market
-        }
 
-
-        #endregion
-   
+        protected override int TimeOut => 3*1000 ; // 3秒斷現
+       
         public PriceStatus Price { get; private set; }
-        public string Contect { get; private set; }
-        public string URL { get; private set; }
-        public string TokenCoin { get; private set;  }
-        public bool IsError = false;
-        public string ErrorCode { get; private set; }
-        public string LastRevTime
-        {
-            get { return lastRevTime.ToString("HH:mm:ss"); }
-        }
 
+        //public string URL { get; private set; }
+        //public string TokenCoin { get; private set; }
+        //public bool IsError { get; private set; }
+        //public bool IsError = false;
+        //public string ErrorCode { get; private set; }
+        //public bool IsTimeOutLimit { get { return true; } }
+
+        ////private DateTime lastRevTime = DateTime.MinValue;
+        ////public string LastRevTime
+        ////{
+        ////    get { return lastRevTime.ToString("HH:mm:ss"); }
+        ////}
         //private RestClient client;//http请求客户端
-        private HttpWebRequest client;//http请求客户端
-        private DateTime lastRevTime = DateTime.MinValue;
 
-
-        private HttpWebRequest request;
-        private HttpWebResponse response;
         public HuobiRestfulApi()
         {
         }
         
-        public void Init()
+        //public override void Init()
+        public override void Init()
         {
-            client = WebRequest.Create(this.HoubitHOSTURL) as HttpWebRequest;
+            client = WebRequest.Create(base.HOSTURL) as HttpWebRequest;
             client.ContentType = "application/json";
             client.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
+
+
+
 
             ////client = new RestClient(HoubitHOSTURL);
             ////client.AddDefaultHeader("Content-Type", "application/json");
@@ -59,104 +49,119 @@ namespace ZeroRestAPI
         /// <summary>
         /// 請求前清空
         /// </summary>
-        public void Clear()
+        public  override  void  Clear()
         {
             this.Price = null;
-            this.Contect = string.Empty;
-            this.TokenCoin = string.Empty;
-            this.IsError = false;
-            this.ErrorCode = string.Empty;
+            contect = string.Empty;
+            tokenCoin = string.Empty;
+            this.isError = false;
+            this.errorCode = string.Empty;
         }
 
         #region HTTP请求方法
 
-        /// <summary>
-        /// 发起Http请求
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="resourcePath">market</param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public Boolean SendRequest(string resourcePath, string parameters = "")
-        {
-            this.Clear(); //送出請求前參數reset
-            this.TokenCoin = parameters;
-            this.URL = $"{HoubitHOSTURL}{resourcePath}?symbol={parameters}";  // ?GET /market/detail/merged?symbol=ethusdt */
+        //public static async Task<bool ,string  ,string>SendRequest (string url )
+        //{
+        //    var success = false;
+        //    var errMsg = false;
+        //    try
+        //    {
 
-            try
-            {
-                request = WebRequest.Create(this.URL) as HttpWebRequest;
-                response = request.GetResponse() as HttpWebResponse; ////request.Method = "GET";   
+        //        var request = WebRequest.Create(url) as HttpWebRequest;
+        //        var response = request.GetResponse() as HttpWebResponse; ////request.Method = "GET";   
 
-                string msg = string.Empty;
-                using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default))
-                {
-                    msg = sr.ReadToEnd();
-                }
-                //parse json
-                this.Contect = ToJsonFormat(msg);
-                if (this.Contect.IndexOf("tick") != -1)
-                {
-                    this.Price = Newtonsoft.Json.JsonConvert.DeserializeObject<PriceStatus>(this.Contect);
-                }
-                else if (this.Contect.IndexOf("error") != -1)
-                {
-                    IsError = true;
-                    ErrorCode = this.Contect;
-                }
-                else
-                {
+        //        string msg = string.Empty;
+        //        using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default))
+        //        {
+        //            msg = sr.ReadToEnd();
+        //        }
+        //        //parse json
+        //        //var contect = JsonHelper.DeserializeToString(msg);
+        //        if (msg.IndexOf("tick") != -1)
+        //        {
+        //            success = true;
+        //        }
+        //        else if (msg.IndexOf("error") != -1)
+        //        {
+        //            success = false;
+        //        }
+        //        else
+        //        {
 
-                }
+        //        }
 
 
-            }
-            catch (Exception ex)
-            {
-                this.ErrorCode = ex.Message;
-                IsError = true;
-                return false;
-            }
-            lastRevTime = DateTime.Now;
-            return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        cont
+        //    }
+        //    base.lastRevTime = DateTime.Now;
+        //    return true;
+        //}
 
-            #region Restful sharp
-            //this.Clear(); //送出請求前參數reset
-            //this.TokenCoin = parameters; 
-            //this.URL = $"{HoubitHOSTURL}{resourcePath}?symbol={parameters}";  // ?GET /market/detail/merged?symbol=ethusdt */
-            ////Console.WriteLine(url);
-            //var request = new RestRequest(this.URL, Method.GET);
-            //var result = client.GetResponse();
-            ////var result = client.Execute(request);
-            //this.Contect = ToJsonFormat (result.Content);
-            //if (result.Content.IndexOf("tick") != -1)
-            //{ 
-            //    this.Price = Newtonsoft.Json.JsonConvert.DeserializeObject<PriceStatus>(this.Contect);           
-            //}
-            //else if (result.Content.IndexOf("error") != -1)
-            //{
-            //    IsError = true;
-            //}
-            //else
-            //{
 
-            //}
+        ///// <summary>
+        ///// 发起Http请求
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="resourcePath">market</param>
+        ///// <param name="parameters"></param>
+        ///// <returns></returns>
+        //public override bool SendRequest(string resourcePath, string parameters = "")
+        //{
+        //    this.Clear(); //送出請求前參數reset
+        //    this.TokenCoin = parameters;
+        //    this.URL = $"{HoubitHOSTURL}{resourcePath}?symbol={parameters}";  // ?GET /market/detail/merged?symbol=ethusdt */
 
-            #endregion
+        //    try
+        //    {
+        //        request = WebRequest.Create(this.URL) as HttpWebRequest;
+        //        if (IsTimeOutLimit)
+        //            request.Timeout = TimeOut;
+        //        response = request.GetResponse() as HttpWebResponse; ////request.Method = "GET";   
 
-            //return this.Contect;
-        }
+        //        string msg = string.Empty;
+        //        using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default))
+        //        {
+        //            msg = sr.ReadToEnd();
+        //        }
+        //        //parse json
+        //        this.Contect = ToJsonFormat(msg);
+        //        if (this.Contect.IndexOf("tick") != -1)
+        //        {
+        //            this.Price = Newtonsoft.Json.JsonConvert.DeserializeObject<PriceStatus>(this.Contect);
+        //        }
+        //        else if (this.Contect.IndexOf("error") != -1)
+        //        {
+        //            IsError = true;
+        //            ErrorCode = this.Contect;
+        //        }
+        //        else
+        //        {
 
-        public string ToJsonFormat(string msg)
-        {
-            return JsonHelper.DeserializeToString(msg);
-        }
+        //        }
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        this.ErrorCode = ex.Message;
+        //        IsError = true;
+        //        return false;
+        //    }
+        //    base.lastRevTime = DateTime.Now;
+        //    return true;
+
+ 
+        //}
+
 
         #endregion
 
         #region Excel Method
 
-        public decimal GetClose()
+        public override decimal GetClose()
         {
             return this.Price != null ? (decimal)Price.tick.close : 0m;
         }
@@ -165,7 +170,7 @@ namespace ZeroRestAPI
         /// </summary>
         /// <param name="idx">[0:price];[1:vol]</param>
         /// <returns></returns>
-        public decimal GetBid(int idx)
+        public override decimal GetBid(int idx)
         {
             return this.Price != null ? (decimal)this.Price.tick.bid[idx] : 0m;
         }
@@ -175,19 +180,38 @@ namespace ZeroRestAPI
         /// </summary>
         /// <param name="idx">[0:price];[1:vol] </param>
         /// <returns></returns>
-        public decimal GetAsk(int idx)
+        public override decimal GetAsk(int idx)
         {
             return this.Price != null ? (decimal)this.Price.tick.ask[idx] : 0m;
         }
-        public string GetErrorCode ()
+
+        public override string GetErrorCode ()
         {
             return this.ErrorCode;
         }
 
+        public override void FormatToObject(string msg)
+        {
+            contect = ToJsonFormat(msg);
+            if (this.Contect.IndexOf("tick") != -1)
+            {
+                this.Price = Newtonsoft.Json.JsonConvert.DeserializeObject<PriceStatus>(this.Contect);
+            }
+            else if (this.Contect.IndexOf("error") != -1)
+            {
+                isError = true;
+                errorCode = this.Contect;
+            }
+            else
+            {
+
+            }
+
+        }
+
+
 
         #endregion
-
-        
 
 
         #region No Use 

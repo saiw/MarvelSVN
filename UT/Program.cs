@@ -13,6 +13,8 @@ namespace APITest
             Console.WriteLine("Test GetMaketDeatil ");
 
             HuobiApiTests test = new HuobiApiTests();
+
+            //test.GeOKCoinDetail();
             test.GetMaketDeatil();
 
             Console.ReadKey();
@@ -31,64 +33,101 @@ namespace APITest
          */
 
         //HuobiRestfulApi api = new HuobiRestfulApi("api.huobipro.com"); 
-        HuobiRestfulApi api = new HuobiRestfulApi();
+
+        [TestMethod()]
+        public void GeKuCoinDetail()
+        {
+            ////https://www.okcoin.com/api/v1/ticker.do?symbol=ltc_usd
+            //HuobiRestfulApi api = new HuobiRestfulApi();
+            //api.host = "www.okcoin.com";
+            //api.Init();
+
+            //string path = "/api/v1/ticker.do";
+            //string param = "bkx_etc";
+            //var result = api.SendRequest(path, param);
+
+
+            //Console.WriteLine(api.Contect);
+        }
+        
+        [TestMethod()]
+        public void GeOKCoinDetail()
+        {
+            //////https://www.okcoin.com/api/v1/ticker.do?symbol=ltc_usd
+            ////HuobiRestfulApi api = new HuobiRestfulApi();
+            ////api.host = "www.okcoin.com";
+            ////api.Init();
+
+            ////string path = "/api/v1/ticker.do";
+            ////string param = "bkx_etc";
+            ////var result = api.SendRequest(path, param);
+
+
+            ////Console.WriteLine(api.Contect);
+        }
+
+
+
 
         [TestMethod()]
         public void GetMaketDeatil()
         {
-            api.HoubitHOST = "api.huobipro.com";
+            HuobiRestfulApi api = new HuobiRestfulApi();
+            api.host = "api.huobipro.com";
             api.Init();
             string path = "/market/detail/merged";
-
+            
             //cointoken
             string param = "ethbtc";
             var result = api.SendRequest(path, param);
-            Print();
+            Print( api);
 
             ///
             param = "quneth";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
 
             param = "qunbtc";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
 
             param = "ekoeth";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
 
             param = "ekobtc";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
 
             param = "qusheth";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
 
             param = "qushbtc";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
 
             param = "thetaeth";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
 
             param = "thetabtc";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
 
             param = "wicceth";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
 
             param = "wiccbtc";
             result = api.SendRequest(path, param);
-            Print();
+            Print(api);
         }
 
-        public void Print()
+        public void Print(AbstractRestful api)
         {
+
+             
             Console.WriteLine(api.URL);
             if (api.IsError)
                 Console.WriteLine(api.ErrorCode);
