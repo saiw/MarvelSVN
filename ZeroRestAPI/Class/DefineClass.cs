@@ -8,32 +8,7 @@ using System.Threading.Tasks;
 namespace ZeroRestAPI
 {
 
-    public abstract class AbstractRequest
-    {
-        public string Contect { get; private set; }
-        public string URL { get; private set; }
-        public string TokenCoin { get; private set; }
-        public bool IsError = false;
-        public string ErrorCode { get; private set; }
 
-        private DateTime lastRevTime = DateTime.MinValue;
-        public string LastRevTime
-        {
-            get { return lastRevTime.ToString("HH:mm:ss"); }
-        }
-        //private RestClient client;//http请求客户端
-        private HttpWebRequest client;//http请求客户端
-
-        public abstract void Init();
-
-        public abstract Boolean SendRequest(string resourcePath, string parameters = "");
-
-        public abstract string ToJsonFormat(string msg);
-    }
-    public interface IExcel
-    {
-        decimal GetClose();
-    }
 
     public class PriceStatus
     {
