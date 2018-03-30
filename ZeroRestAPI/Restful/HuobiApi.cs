@@ -13,6 +13,9 @@ namespace ZeroRestAPI
        
         public PriceStatus Price { get; private set; }
 
+        public override string URL
+        { get => $"{HOSTURL}{ResourcePath}?symbol={TokenCoin}"; }
+
         //public string URL { get; private set; }
         //public string TokenCoin { get; private set; }
         //public bool IsError { get; private set; }
@@ -31,20 +34,12 @@ namespace ZeroRestAPI
         {
         }
         
+        ////public override void Init()
         //public override void Init()
-        public override void Init()
-        {
-            client = WebRequest.Create(base.HOSTURL) as HttpWebRequest;
-            client.ContentType = "application/json";
-            client.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
+        //{
+        //  //not to do Now
 
-
-
-
-            ////client = new RestClient(HoubitHOSTURL);
-            ////client.AddDefaultHeader("Content-Type", "application/json");
-            ////client.AddDefaultHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36");
-        }
+        //}
 
         /// <summary>
         /// 請求前清空
@@ -53,10 +48,70 @@ namespace ZeroRestAPI
         {
             this.Price = null;
             contect = string.Empty;
-            tokenCoin = string.Empty;
-            this.isError = false;
-            this.errorCode = string.Empty;
+            this.TokenCoin = string.Empty;
+            isError = false;
+            errorCode = string.Empty;
         }
+        public override void Parse(string msg)
+        {
+            contect = ToJsonFormat(msg);
+            if (this.Contect.IndexOf("tick") != -1)
+            {
+                this.Price = Newtonsoft.Json.JsonConvert.DeserializeObject<PriceStatus>(this.Contect);
+            }
+            else if (this.Contect.IndexOf("error") != -1)
+            {
+                isError = true;
+                errorCode = this.Contect;
+            }
+            else
+            {
+
+            }
+
+        }
+
+        #region Excel Method
+
+        public override decimal GetClose()
+        {
+            return this.Price != null ? (decimal)Price.tick.close : 0m;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idx">[0:price];[1:vol]</param>
+        /// <returns></returns>
+        public override decimal GetBid()
+        {
+            return this.Price != null ? (decimal)this.Price.tick.bid[0] : 0m;
+        }
+
+        public override decimal GetBidVol()
+        {
+            return this.Price != null ? (decimal)this.Price.tick.bid[1] : 0m;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idx">[0:price];[1:vol] </param>
+        /// <returns></returns>
+        public override decimal GetAsk()
+        {
+            return this.Price != null ? (decimal)this.Price.tick.ask[0] : 0m;
+        }
+
+        public override decimal GetAskVol()
+        {
+            return this.Price != null ? (decimal)this.Price.tick.ask[1] : 0m;
+        }
+        public override string GetErrorCode ()
+        {
+            return this.ErrorCode;
+        }
+
+
+        #endregion
 
         #region HTTP请求方法
 
@@ -153,62 +208,8 @@ namespace ZeroRestAPI
         //    base.lastRevTime = DateTime.Now;
         //    return true;
 
- 
+
         //}
-
-
-        #endregion
-
-        #region Excel Method
-
-        public override decimal GetClose()
-        {
-            return this.Price != null ? (decimal)Price.tick.close : 0m;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="idx">[0:price];[1:vol]</param>
-        /// <returns></returns>
-        public override decimal GetBid(int idx)
-        {
-            return this.Price != null ? (decimal)this.Price.tick.bid[idx] : 0m;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="idx">[0:price];[1:vol] </param>
-        /// <returns></returns>
-        public override decimal GetAsk(int idx)
-        {
-            return this.Price != null ? (decimal)this.Price.tick.ask[idx] : 0m;
-        }
-
-        public override string GetErrorCode ()
-        {
-            return this.ErrorCode;
-        }
-
-        public override void FormatToObject(string msg)
-        {
-            contect = ToJsonFormat(msg);
-            if (this.Contect.IndexOf("tick") != -1)
-            {
-                this.Price = Newtonsoft.Json.JsonConvert.DeserializeObject<PriceStatus>(this.Contect);
-            }
-            else if (this.Contect.IndexOf("error") != -1)
-            {
-                isError = true;
-                errorCode = this.Contect;
-            }
-            else
-            {
-
-            }
-
-        }
-
 
 
         #endregion

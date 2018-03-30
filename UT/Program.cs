@@ -12,16 +12,16 @@ namespace APITest
 
             Console.WriteLine("Test GetMaketDeatil ");
 
-            HuobiApiTests test = new HuobiApiTests();
+            ApiTests test = new ApiTests();
 
-            //test.GeOKCoinDetail();
-            test.GetMaketDeatil();
+            test.GeKuCoinDetail();
+            //test.GetMaketDeatil();
 
             Console.ReadKey();
         }
     }
     [TestClass()]
-    public class HuobiApiTests
+    public class ApiTests
     {
         /* 1.api = new HuobiApi(網域)
          *   vba 使用  api = new HuobiApi()
@@ -37,19 +37,111 @@ namespace APITest
         [TestMethod()]
         public void GeKuCoinDetail()
         {
-            ////https://www.okcoin.com/api/v1/ticker.do?symbol=ltc_usd
-            //HuobiRestfulApi api = new HuobiRestfulApi();
-            //api.host = "www.okcoin.com";
-            //api.Init();
+            //var result = false;
 
-            //string path = "/api/v1/ticker.do";
-            //string param = "bkx_etc";
-            //var result = api.SendRequest(path, param);
+            KuCoinRestfulApi api = new KuCoinRestfulApi();
+            api.Host = "api.kucoin.com";
 
+            /*ACAT - BTC */
+            api.Clear();
+            api.TokenCoin = "ACAT-BTC";
+            api.ResourcePath = $"/v1/{api.TokenCoin}/open/tick"; //https://api.kucoin.com/v1/ETH-BTC/open/tick
+            Console.WriteLine(api.URL);
+            api.SendRequest(api.URL);
+
+            Console.WriteLine(api.OrderBookURL);//https://api.kucoin.com/v1/ETH-BTC/open/orders                                         
+            api.SendRequest(api.OrderBookURL);
+       
+
+            Print(api);
+
+            /*ACAT-ETH*/
+            api.Clear();
+            api.TokenCoin = "ACAT-ETH";
+            api.ResourcePath = $"/v1/{api.TokenCoin}/open/tick";
+
+            Console.WriteLine(api.URL);
+            api.SendRequest(api.URL);
+            Console.WriteLine(api.OrderBookURL);//api.ResourcePath = $"/v1/{api.TokenCoin}/open/orders";
+            api.SendRequest(api.OrderBookURL);  //api.ResourcePath = $"/v1/{api.TokenCoin}/open/orders";
+
+
+            Print(api);
 
             //Console.WriteLine(api.Contect);
+
+
+
         }
-        
+        [TestMethod()]
+        public void GetMaketDeatil()
+        {
+            HuobiRestfulApi api = new HuobiRestfulApi();
+            api.Host = "api.huobipro.com";
+            api.ResourcePath = "/market/detail/merged";
+
+            api.Clear();
+            api.TokenCoin = "ethbtc";
+            Console.WriteLine(api.URL);
+            var result = api.SendRequest(api.URL);
+            Print( api);
+
+            /////
+
+            api.Clear();
+            api.TokenCoin = "quneth";
+            Console.WriteLine(api.URL);
+            result = api.SendRequest(api.URL);
+            Print(api);
+
+            api.Clear();
+            api.TokenCoin = "qunbtc";
+            Console.WriteLine(api.URL);
+            result = api.SendRequest(api.URL);
+            Print(api);
+
+            //param = "ekoeth";
+            //api.Clear();
+            //result = api.SendRequest(path, param);
+            //Print(api);
+
+            //param = "ekobtc";
+            //api.Clear();
+            //result = api.SendRequest(path, param);
+            //Print(api);
+
+            //param = "qusheth";
+            //api.Clear();
+            //result = api.SendRequest(path, param);
+            //Print(api);
+
+            //param = "qushbtc";
+            //api.Clear();
+            //result = api.SendRequest(path, param);
+            //Print(api);
+
+            //param = "thetaeth";
+            //api.Clear();
+            //result = api.SendRequest(path, param);
+            //Print(api);
+
+            //param = "thetabtc";
+            //api.Clear();
+            //result = api.SendRequest(path, param);
+            //Print(api);
+
+            //param = "wicceth";
+            //api.Clear();
+            //result = api.SendRequest(path, param);
+            //Print(api);
+
+            //param = "wiccbtc";
+            //api.Clear();
+            //result = api.SendRequest(path, param);
+            //Print(api);
+        }
+
+
         [TestMethod()]
         public void GeOKCoinDetail()
         {
@@ -62,110 +154,24 @@ namespace APITest
             ////string param = "bkx_etc";
             ////var result = api.SendRequest(path, param);
 
-
             ////Console.WriteLine(api.Contect);
         }
-
-
-
-
-        [TestMethod()]
-        public void GetMaketDeatil()
-        {
-            HuobiRestfulApi api = new HuobiRestfulApi();
-            api.host = "api.huobipro.com";
-            api.Init();
-            string path = "/market/detail/merged";
-            
-            //cointoken
-            string param = "ethbtc";
-            var result = api.SendRequest(path, param);
-            Print( api);
-
-            ///
-            param = "quneth";
-            result = api.SendRequest(path, param);
-            Print(api);
-
-            param = "qunbtc";
-            result = api.SendRequest(path, param);
-            Print(api);
-
-            param = "ekoeth";
-            result = api.SendRequest(path, param);
-            Print(api);
-
-            param = "ekobtc";
-            result = api.SendRequest(path, param);
-            Print(api);
-
-            param = "qusheth";
-            result = api.SendRequest(path, param);
-            Print(api);
-
-            param = "qushbtc";
-            result = api.SendRequest(path, param);
-            Print(api);
-
-            param = "thetaeth";
-            result = api.SendRequest(path, param);
-            Print(api);
-
-            param = "thetabtc";
-            result = api.SendRequest(path, param);
-            Print(api);
-
-            param = "wicceth";
-            result = api.SendRequest(path, param);
-            Print(api);
-
-            param = "wiccbtc";
-            result = api.SendRequest(path, param);
-            Print(api);
-        }
-
+        
         public void Print(AbstractRestful api)
         {
-
-             
-            Console.WriteLine(api.URL);
             if (api.IsError)
                 Console.WriteLine(api.ErrorCode);
-            else 
-            Console.WriteLine($"Close ={api.GetClose()} ," +
-                              $"Bid ={api.GetBid(0)},vol={api.GetBid(1)}" +
-                              $"Ask ={api.GetAsk(0)},vol={api.GetAsk(1)}" +
-                              $"\n { api.LastRevTime} ; {api.TokenCoin}");
+            else
+                Console.WriteLine($"Close ={api.GetClose()};\n" +
+                                  $"Bid ={api.GetBid()};Vol=[{api.GetBidVol()}],\n" +
+                                  $"Ask ={api.GetAsk()};Vol=[{api.GetAskVol()}],\n" +
+                                  $"--{ api.LastRevTime}--{api.TokenCoin}--\n");
 
             //Console.WriteLine(api.Contect);
-            Console.WriteLine(api.LastRevTime);
+            //Console.Write($"{api.LastRevTime}\n");
 
         }
 
-        [TestMethod()]
-        public void GetAllAccountTest()
-        {
-            //var result = api.GetAllAccount();
-            //Console.WriteLine(result.GetEnumerator());
-            //Assert.IsNull(result);
-        }
 
-        [TestMethod()]
-        public void OrderPlaceTest()
-        {
-            //var accounts = api.GetAllAccount();
-            //var spotAccountId = accounts.FirstOrDefault(a => a.Type == "spot" && a.State == "working")?.Id;
-            //if (spotAccountId <= 0)
-            //    throw new ArgumentException("spot account unavailable");
-            //OrderPlaceRequest req = new OrderPlaceRequest();
-            //req.account_id = spotAccountId.ToString();
-            //req.amount = "0.1";
-            //req.price = "800";
-            //req.source = "api";
-            //req.symbol = "ethusdt";
-            //req.type = "buy-limit";
-            //var result = api.OrderPlace(req);
-            //Assert.AreEqual(result.Status, "ok");
-        }
     }
 }
