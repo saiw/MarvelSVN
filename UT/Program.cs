@@ -10,13 +10,17 @@ namespace APITest
         {
             Console.WriteLine("Hello World!");
 
-            Console.WriteLine("Test GetMaketDeatil ");
 
             ApiTests test = new ApiTests();
-
-            test.GeKuCoinDetail();
+            Console.WriteLine("========Test GetHitBtcDetail  =========");
+            test.GetHitBtcDetail();
+            //Console.WriteLine("========Test GetOkexCoinDetail=========");
+            //test.GetOkexCoinDetail();
+            //test.GetBinanceDetail();
+            //test.GetKuCoinDetail();
             //test.GetMaketDeatil();
 
+            Console.WriteLine("press any key to exit");
             Console.ReadKey();
         }
     }
@@ -31,11 +35,91 @@ namespace APITest
          * 3.GetClose / GetBid(0) ->Bid price ; 
          *              GetBid(1) ->Bid Vol   ; ask 同理
          */
-
-        //HuobiRestfulApi api = new HuobiRestfulApi("api.huobipro.com"); 
-
         [TestMethod()]
-        public void GeKuCoinDetail()
+        public void GetHitBtcDetail()
+        {
+            HTBRestfulApi api = new HTBRestfulApi();
+            api.Host = "api.hitbtc.com";
+
+            api.TokenCoin = "LTCETH";
+            api.ResourcePath = $"/api/1/public/{api.TokenCoin}/ticker";
+            Console.WriteLine(api.URL);                                //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
+            api.ResourcePath2 = $"/api/1/public/{api.TokenCoin}/orderbook";
+            Console.WriteLine(api.SecondURL);                          //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
+            api.SendCombineRequest(api.URL, api.SecondURL);
+            Print(api);
+
+            api.Clear();
+            //api.Dispose();
+
+            api.TokenCoin = "LTCBTC";
+            api.ResourcePath = $"/api/1/public/{api.TokenCoin}/ticker";
+            Console.WriteLine(api.URL);                                //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
+            api.ResourcePath2 = $"/api/1/public/{api.TokenCoin}/orderbook";
+            Console.WriteLine(api.SecondURL);                          //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
+            api.SendCombineRequest(api.URL, api.SecondURL);
+            Print(api);
+
+
+        }
+        [TestMethod()]
+        public void GetOkexCoinDetail()
+        {
+            OkexRestfulApi api = new OkexRestfulApi();
+            api.Host = "www.okex.com";
+
+            //api.TokenCoin = "ltc_btc";
+            //api.ResourcePath = "/api/v1/ticker.do";
+            //Console.WriteLine(api.URL);                  //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
+            //api.ResourcePath2 = "/api/v1/depth.do";
+            //Console.WriteLine(api.SecondURL);           //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
+            //api.SendCombineRequest(api.URL, api.SecondURL);
+            //Print(api);
+
+            api.Clear();
+            api.TokenCoin = "bkx_eth";
+            api.ResourcePath = "/api/v1/ticker.do";
+            Console.WriteLine(api.URL);                  //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
+            api.ResourcePath2 = "/api/v1/depth.do";
+            Console.WriteLine(api.SecondURL);           //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
+            api.SendCombineRequest(api.URL, api.SecondURL);
+            Print(api);
+
+            api.Clear();
+            api.TokenCoin = "bch_btc";
+            api.ResourcePath = "/api/v1/ticker.do";
+            Console.WriteLine(api.URL);                  //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
+            api.ResourcePath2 = "/api/v1/depth.do";
+            Console.WriteLine(api.SecondURL);           //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
+            api.SendCombineRequest(api.URL, api.SecondURL);
+            Print(api);
+
+        }
+        [TestMethod()]
+        public void GetBinanceDetail()
+        {
+            BinanceRestfulApi api = new BinanceRestfulApi();
+            api.Host = "api.binance.com";
+
+            /*LTCBTC */
+            api.Clear();
+            api.TokenCoin = "EOSBTC";
+            api.ResourcePath = $"/api/v1/ticker/24hr"; //https://api.binance.com/api/v1/ticker/24hr?symbol=BNBBTC
+            Console.WriteLine(api.URL);
+            api.SendRequest(api.URL);
+            Print(api);
+
+            /*Error*/
+            api.Clear();
+            api.TokenCoin = "xxx";
+            api.ResourcePath = $"/api/v1/ticker/24hr"; //https://api.binance.com/api/v1/ticker/24hr?symbol=BNBBTC
+            Console.WriteLine(api.URL);
+            api.SendRequest(api.URL);
+            Print(api);
+
+        }
+        [TestMethod()]
+        public void GetKuCoinDetail()
         {
             //var result = false;
 
@@ -139,11 +223,9 @@ namespace APITest
             //api.Clear();
             //result = api.SendRequest(path, param);
             //Print(api);
-        }
-
-
+        }       
         [TestMethod()]
-        public void GeOKCoinDetail()
+        public void GetOKCoinDetail()
         {
             //////https://www.okcoin.com/api/v1/ticker.do?symbol=ltc_usd
             ////HuobiRestfulApi api = new HuobiRestfulApi();

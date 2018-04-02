@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ZeroRestAPI")]
-[assembly: AssemblyDescription(".net FrameWork 4.7")]
+[assembly: AssemblyDescription("ZeroApi Donet 4.7")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HTB")]
 [assembly: AssemblyProduct("ZeroRestAPI")]

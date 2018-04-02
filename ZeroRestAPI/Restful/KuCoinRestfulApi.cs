@@ -1,8 +1,18 @@
-﻿using System;
+﻿/* Create
+ * Author :Joqq Lin
+ * DATE   :2018-03-29
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+
+/*refrence 
+ * https://kucoinapidocs.docs.apiary.io/#reference/0/market
+ */
 
 namespace ZeroRestAPI
 {
@@ -10,6 +20,8 @@ namespace ZeroRestAPI
     {
         protected override int TimeOut => 3 * 1000; // 3秒斷現
         public override string URL => $"{HOSTURL}{ResourcePath}";//https://api.kucoin.com/v1/ETH-BTC/open/tick
+
+        public string SecondURL => $"{HOSTURL}{ResourcePath2}";//https://api.kucoin.com/v1/ETH-BTC/open/orders
 
         public string OrderBookURL => URL.Replace("tick", "orders");
 
