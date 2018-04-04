@@ -48,8 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Restful\QryptosRestfulApi.cs" />
     <Compile Include="Restful\BinanceRestfulApi.cs" />
     <Compile Include="Class\Helper.cs" />
+    <Compile Include="Restful\BitfinexRestful.cs" />
     <Compile Include="Restful\HTBRestfulApi.cs" />
     <Compile Include="Restful\HuobiApi.cs" />
     <Compile Include="Class\DefineClass.cs" />

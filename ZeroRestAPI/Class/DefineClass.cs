@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ZeroRestAPI
 {
-    public abstract class AbstractRestful:IDisposable
+    public abstract class AbstractRestful : IDisposable
     {
 
         #region Api配置信息
@@ -26,10 +26,10 @@ namespace ZeroRestAPI
             get { return $"https://" + Host; }  //https://api.huobipro.com/market
         }
 
-        public abstract string  URL { get; }
+        public abstract string URL { get; }
 
         //protected string tokenCoin = string.Empty;
-        public string TokenCoin {  get; set; }
+        public string TokenCoin { get; set; }
 
         //protected string path = string.Empty;
         public string ResourcePath { get; set; }
@@ -100,7 +100,7 @@ namespace ZeroRestAPI
             return true;
         }
 
-        public bool SendRequest(string url )
+        public bool SendRequest(string url)
         {
             try
             {
@@ -140,14 +140,14 @@ namespace ZeroRestAPI
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public bool SendCombineRequest(string url ,string sec_url  )
+        public bool SendCombineRequest(string url, string sec_url)
         {
             if (url == sec_url)
             {
                 this.errorCode = "Double URL!";
                 return false;
-            } 
-            
+            }
+
             string msg = string.Empty;
 
             try
@@ -166,10 +166,10 @@ namespace ZeroRestAPI
                 }
 
                 if (msg.Length < 1)
-                    return false;   
+                    return false;
                 Parse(msg);  //parse json
 
-                /* URL 2*/ 
+                /* URL 2*/
                 request = WebRequest.Create(sec_url) as HttpWebRequest;
                 request.ContentType = "application/json";
                 request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36";
@@ -236,7 +236,7 @@ namespace ZeroRestAPI
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
-                
+
                 GC.Collect();
                 disposed = true;
             }
@@ -352,7 +352,7 @@ namespace ZeroRestAPI
         public int code { get; set; }
         public string msg { get; set; }
     }
-    
+
     public class BinancePriceStatus
     {
         public string symbol { get; set; }
@@ -439,6 +439,36 @@ namespace ZeroRestAPI
 
 
     #endregion
+
+    #region  Bitfinex
+    public static class Bitfinex
+    {
+        public enum Tick
+        {
+            SYMBOL,
+            BID,
+            BID_SIZE,
+            ASK,
+            ASK_SIZE,
+            DAILY_CHANGE,
+            DAILY_CHANGE_PERC,
+            LAST_PRICE,
+            VOLUME,
+            HIGH,
+            LOW
+        }
+
+    }
+    ////public class BitFinexPrice  //not json parse
+    ////{
+    ////    public string[][] Property1 { get; set; }
+    ////}
+
+    #endregion
+
+    #region Qryptos
+
+    #endregion 
 
     #endregion
 }

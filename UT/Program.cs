@@ -9,14 +9,17 @@ namespace APITest
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-
-
             ApiTests test = new ApiTests();
-            Console.WriteLine("========Test GetHitBtcDetail  =========");
-            test.GetHitBtcDetail();
+
+            Console.WriteLine("========Test GetBifinexDetail  =========");
+            test.GetBifinexDetail();
+            
+            //Console.WriteLine("========Test GetHitBtcDetail  =========");
+            //test.GetHitBtcDetail();
             //Console.WriteLine("========Test GetOkexCoinDetail=========");
             //test.GetOkexCoinDetail();
             //test.GetBinanceDetail();
+            //Console.WriteLine("========Test GeKuCoinRestfulApi  =========");
             //test.GetKuCoinDetail();
             //test.GetMaketDeatil();
 
@@ -27,6 +30,7 @@ namespace APITest
     [TestClass()]
     public class ApiTests
     {
+
         /* 1.api = new HuobiApi(網域)
          *   vba 使用  api = new HuobiApi()
                        api.HoubitHOST = "api.huobipro.com";
@@ -35,6 +39,26 @@ namespace APITest
          * 3.GetClose / GetBid(0) ->Bid price ; 
          *              GetBid(1) ->Bid Vol   ; ask 同理
          */
+        [TestMethod()]
+        public void GetBifinexDetail()
+        {
+            BitfinexRestful api = new BitfinexRestful();
+            api.Host = "api.bitfinex.com";
+
+            api.TokenCoin = "EOSBTC";
+            api.ResourcePath = $"/v2/tickers";
+            Console.WriteLine(api.URL);             //https://api.bitfinex.com/v2/tickers?symbols=tEOSBTC          
+            api.SendRequest(api.URL);
+            Print(api);
+
+            api.Clear(); /// 清空
+
+            api.TokenCoin = "EOSETH";
+            api.ResourcePath = $"/v2/tickers";
+            Console.WriteLine(api.URL);             //https://api.bitfinex.com/v2/tickers?symbols=tEOSBTC          
+            api.SendRequest(api.URL);
+            Print(api);
+        }
         [TestMethod()]
         public void GetHitBtcDetail()
         {
@@ -127,32 +151,32 @@ namespace APITest
             api.Host = "api.kucoin.com";
 
             /*ACAT - BTC */
-            api.Clear();
+            //api.Clear();
             api.TokenCoin = "ACAT-BTC";
-            api.ResourcePath = $"/v1/{api.TokenCoin}/open/tick"; //https://api.kucoin.com/v1/ETH-BTC/open/tick
-            Console.WriteLine(api.URL);
-            api.SendRequest(api.URL);
+            api.ResourcePath = $"/v1/{api.TokenCoin}/open/tick";             //https://api.kucoin.com/v1/ETH-BTC/open/tick
+            Console.WriteLine(api.URL);                                
+            api.ResourcePath2 = $"/v1/{api.TokenCoin}/open/orders";  //https://api.kucoin.com/v1/ETH-BTC/open/orders   
+            Console.WriteLine(api.SecondURL);  
 
-            Console.WriteLine(api.OrderBookURL);//https://api.kucoin.com/v1/ETH-BTC/open/orders                                         
-            api.SendRequest(api.OrderBookURL);
-       
-
+            api.SendCombineRequest(api.URL, api.SecondURL);
             Print(api);
 
-            /*ACAT-ETH*/
-            api.Clear();
-            api.TokenCoin = "ACAT-ETH";
-            api.ResourcePath = $"/v1/{api.TokenCoin}/open/tick";
+            //////////api.ResourcePath = $"/v1/{api.TokenCoin}/open/tick"; 
+            //////////Console.WriteLine(api.URL);
+            //////////api.SendRequest(api.URL);
+            ////////Console.WriteLine(api.OrderBookURL);
+            ////////api.SendRequest(api.OrderBookURL);
+            //api.Clear();
 
-            Console.WriteLine(api.URL);
-            api.SendRequest(api.URL);
-            Console.WriteLine(api.OrderBookURL);//api.ResourcePath = $"/v1/{api.TokenCoin}/open/orders";
-            api.SendRequest(api.OrderBookURL);  //api.ResourcePath = $"/v1/{api.TokenCoin}/open/orders";
+            ///*ACAT-ETH*/
+            //api.TokenCoin = "ACAT-ETH";
+            //api.ResourcePath = $"/v1/{api.TokenCoin}/open/tick";
 
-
-            Print(api);
-
-            //Console.WriteLine(api.Contect);
+            //Console.WriteLine(api.URL);
+            //api.SendRequest(api.URL);
+            //Console.WriteLine(api.OrderBookURL);//api.ResourcePath = $"/v1/{api.TokenCoin}/open/orders";
+            //api.SendRequest(api.OrderBookURL);  //api.ResourcePath = $"/v1/{api.TokenCoin}/open/orders";
+            //Print(api);
 
 
 
@@ -244,10 +268,10 @@ namespace APITest
             if (api.IsError)
                 Console.WriteLine(api.ErrorCode);
             else
-                Console.WriteLine($"Close ={api.GetClose()};\n" +
-                                  $"Bid ={api.GetBid()};Vol=[{api.GetBidVol()}],\n" +
-                                  $"Ask ={api.GetAsk()};Vol=[{api.GetAskVol()}],\n" +
-                                  $"--{ api.LastRevTime}--{api.TokenCoin}--\n");
+                Console.WriteLine($"Ask  ={api.GetAsk()}  ;Vol=[{api.GetAskVol()}],\n" +
+                                  $"Close={api.GetClose()};\n" +
+                                  $"Bid  ={api.GetBid()}  ;Vol=[{api.GetBidVol()}],\n" +
+                                  $"------{ api.LastRevTime}--{api.TokenCoin}--\n");
 
             //Console.WriteLine(api.Contect);
             //Console.Write($"{api.LastRevTime}\n");
