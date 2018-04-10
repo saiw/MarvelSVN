@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* Create
+ * Author :Joqq Lin
+ * DATE   :2018-03-30
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +14,7 @@ namespace ZeroRestAPI
     /// URL         :https://hitbtc.com/
     /// API Refrence:https://github.com/hitbtc-com/hitbtc-api/blob/master/APIv1.md
     /// </summary>
+    /// 
     public class HTBRestfulApi : AbstractRestful
     {
         public override string URL => $"{HOSTURL}{ResourcePath}";
@@ -19,7 +24,6 @@ namespace ZeroRestAPI
         public HTBBidAsk BidAsk { get; private set; }
 
         public HTBRestfulApi() { }
-        #region Method
 
         public override void Clear()
         {
@@ -30,7 +34,6 @@ namespace ZeroRestAPI
             isError = false;
             errorCode = string.Empty;
         }
-
         public override void Parse(string msg)
         {
             contect = ToJsonFormat(msg);
@@ -54,53 +57,47 @@ namespace ZeroRestAPI
 
             }
         }
-        #endregion
 
         #region Excel 
 
         public override decimal GetAsk()
         {
-            if (this.BidAsk == null)
-                return 0m;
+            return this.BidAsk != null ? BidAsk.asks[0][0] : 0m;
 
-            decimal ask = 0m;
-            return decimal.TryParse(BidAsk.asks[0][0], out ask) ? ask : 0m; ;
+            //decimal ask = 0m;
+            //return decimal.TryParse(BidAsk.asks[0][0], out ask) ? ask : 0m; ;
         }
 
         public override decimal GetAskVol()
         {
-            if (this.BidAsk == null)
-                return 0m;
+            return this.BidAsk != null ? BidAsk.asks[0][1] : 0m;
 
-            decimal ask = 0m;
-            return decimal.TryParse(BidAsk.asks[0][1], out ask) ? ask : 0m; ;
+            //decimal ask = 0m;
+            //return decimal.TryParse(BidAsk.asks[0][1], out ask) ? ask : 0m; ;
         }
 
         public override decimal GetBid()
         {
-            if (this.BidAsk == null)
-                return 0m;
+            return this.BidAsk != null ? BidAsk.bids[0][0] : 0m;
 
-            decimal bid = 0m;
-            return decimal.TryParse(BidAsk.bids[0][0], out bid) ? bid : 0m; ;
+
+            //decimal bid = 0m;
+            //return decimal.TryParse(BidAsk.bids[0][0], out bid) ? bid : 0m; ;
         }
 
         public override decimal GetBidVol()
         {
-            if (this.BidAsk == null)
-                return 0m;
+            return this.BidAsk != null ? BidAsk.bids[0][1] : 0m;
 
-            decimal bid = 0m;
-            return decimal.TryParse(BidAsk.bids[0][1], out bid) ? bid : 0m; ;
+            //decimal bid = 0m;
+            //return decimal.TryParse(BidAsk.bids[0][1], out bid) ? bid : 0m; ;
         }
 
         public override decimal GetClose()
         {
-            if (this.Price == null)
-                return 0m;
-
-            decimal close = 0m;
-            return decimal.TryParse(Price.last, out close) ? close : 0m;
+            return this.Price != null ? Price.last : 0m;
+            ////decimal close = 0m;
+            ////return decimal.TryParse(Price.last, out close) ? close : 0m;
             
         }
 

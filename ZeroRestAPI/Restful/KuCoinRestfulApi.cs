@@ -10,12 +10,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-/*refrence 
- * https://kucoinapidocs.docs.apiary.io/#reference/0/market
+/* Create
+ * Author :Joqq Lin
+ * DATE   :2018-xx-xx
  */
 
 namespace ZeroRestAPI
 {
+    /// <summary>
+    /// URL         :https://www.kucoin.com/
+    /// API Refrence:https://kucoinapidocs.docs.apiary.io/#introduction/language-parameters
+    /// </summary>
     public class KuCoinRestfulApi : AbstractRestful
     {
         protected override int TimeOut => 3 * 1000; // 3秒斷現
@@ -32,12 +37,7 @@ namespace ZeroRestAPI
         public KuCoinRestfulApi()
         { }
 
-
-        //public override void Init()
-        //{
-        //    //not to do Now
-        //}
-
+        
         /// <summary>
         /// 清除tick object 及請求token
         /// </summary>

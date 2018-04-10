@@ -60,6 +60,7 @@ namespace ZeroRestAPI
         protected HttpWebRequest request;
         protected HttpWebResponse response;
 
+        protected virtual Encoding encoding { get { return Encoding.Default; } } //預設 default ;UTF-8  自行調整
 
         #region Method
         /// <summary>
@@ -113,7 +114,8 @@ namespace ZeroRestAPI
                 response = request.GetResponse() as HttpWebResponse; ////request.Method = "GET";   
 
                 string msg = string.Empty;
-                using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default))
+                //using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default))
+                using (StreamReader sr = new StreamReader(response.GetResponseStream(), encoding)) //預設default
                 {
                     msg = sr.ReadToEnd();
                 }
@@ -159,8 +161,10 @@ namespace ZeroRestAPI
                 if (IsTimeOutLimit)
                     request.Timeout = TimeOut;
                 request.Method = "GET";
+                
                 response = request.GetResponse() as HttpWebResponse; ////request.Method = "GET";   
-                using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default))
+                //using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default))
+                using (StreamReader sr = new StreamReader(response.GetResponseStream(), encoding ))
                 {
                     msg = sr.ReadToEnd();
                 }
@@ -176,8 +180,10 @@ namespace ZeroRestAPI
                 if (IsTimeOutLimit)
                     request.Timeout = TimeOut;
                 request.Method = "GET";
-                response = request.GetResponse() as HttpWebResponse;            ////request.Method = "GET";   
-                using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default))
+                response = request.GetResponse() as HttpWebResponse;
+
+                //using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default))
+                using (StreamReader sr = new StreamReader(response.GetResponseStream(), encoding))
                 {
                     msg = sr.ReadToEnd();
                 }
@@ -207,8 +213,14 @@ namespace ZeroRestAPI
         #endregion
 
         #region  Abastract Method
+        ////public abstract decimal GetClose();
+        ////public abstract decimal GetBid();  //目前都為買賣一檔
+        ////public abstract decimal GetBidVol();
+        ////public abstract decimal GetAsk(int tick = 0);
+        ////public abstract decimal GetAskVol();
+
         public abstract decimal GetClose();
-        public abstract decimal GetBid();  //目前都為買賣一檔
+        public abstract decimal GetBid();       //目前都為買賣一檔
         public abstract decimal GetBidVol();
         public abstract decimal GetAsk();
         public abstract decimal GetAskVol();
@@ -260,10 +272,7 @@ namespace ZeroRestAPI
         }
         #endregion
 
-
-
         #endregion
-
 
     }
 
@@ -356,21 +365,21 @@ namespace ZeroRestAPI
     public class BinancePriceStatus
     {
         public string symbol { get; set; }
-        public string priceChange { get; set; }
-        public string priceChangePercent { get; set; }
-        public string weightedAvgPrice { get; set; }
-        public string prevClosePrice { get; set; }
-        public string lastPrice { get; set; }
-        public string lastQty { get; set; }
-        public string bidPrice { get; set; }
-        public string bidQty { get; set; }
-        public string askPrice { get; set; }
-        public string askQty { get; set; }
-        public string openPrice { get; set; }
-        public string highPrice { get; set; }
-        public string lowPrice { get; set; }
-        public string volume { get; set; }
-        public string quoteVolume { get; set; }
+        public decimal priceChange { get; set; }
+        public decimal priceChangePercent { get; set; }
+        public decimal weightedAvgPrice { get; set; }
+        public decimal prevClosePrice { get; set; }
+        public decimal lastPrice { get; set; }
+        public decimal lastQty { get; set; }
+        public decimal bidPrice { get; set; }
+        public decimal bidQty { get; set; }
+        public decimal askPrice { get; set; }
+        public decimal askQty { get; set; }
+        public decimal openPrice { get; set; }
+        public decimal highPrice { get; set; }
+        public decimal lowPrice { get; set; }
+        public decimal volume { get; set; }
+        public decimal quoteVolume { get; set; }
         public long openTime { get; set; }
         public long closeTime { get; set; }
         public int firstId { get; set; }
@@ -388,12 +397,12 @@ namespace ZeroRestAPI
     }
     public class OKexticker
     {
-        public string high { get; set; }
-        public string vol { get; set; }
-        public string last { get; set; }
-        public string low { get; set; }
-        public string buy { get; set; }
-        public string sell { get; set; }
+        public decimal high { get; set; }
+        public decimal vol { get; set; }
+        public decimal last { get; set; }
+        public decimal low { get; set; }
+        public decimal buy { get; set; }
+        public decimal sell { get; set; }
     }
     public class OKexBidAsk
     {
@@ -421,20 +430,20 @@ namespace ZeroRestAPI
     /// https://api.hitbtc.com/api/1/public/LTCETH/ticker
     public class HTBPrice
     {
-        public string ask { get; set; }
-        public string bid { get; set; }
-        public string last { get; set; }
-        public string low { get; set; }
-        public string high { get; set; }
-        public string open { get; set; }
-        public string volume { get; set; }
-        public string volume_quote { get; set; }
+        public decimal ask { get; set; }
+        public decimal bid { get; set; }
+        public decimal last { get; set; }
+        public decimal low { get; set; }
+        public decimal high { get; set; }
+        public decimal open { get; set; }
+        public decimal volume { get; set; }
+        public decimal volume_quote { get; set; }
         public long timestamp { get; set; }
     }
     public class HTBBidAsk
     {
-        public string[][] asks { get; set; }
-        public string[][] bids { get; set; }
+        public decimal[][] asks { get; set; }
+        public decimal[][] bids { get; set; }
     }
 
 
@@ -467,7 +476,48 @@ namespace ZeroRestAPI
     #endregion
 
     #region Qryptos
+        
+    public class QryptosPrice
+    {
+        public string id { get; set; }
+        public string product_type { get; set; }
+        public string code { get; set; }
+        public object name { get; set; }        //null enable
+        public decimal market_ask { get; set; }
+        public decimal market_bid { get; set; }
+        public int indicator { get; set; }
+        public string currency { get; set; }
+        public string currency_pair_code { get; set; }
+        public string symbol { get; set; }
+        public object btc_minimum_withdraw { get; set; }  //null enable
+        public object fiat_minimum_withdraw { get; set; } //null enable
+        public string pusher_channel { get; set; }
+        public decimal taker_fee { get; set; }
+        public decimal maker_fee { get; set; }
+        public decimal low_market_bid { get; set; }
+        public decimal high_market_ask { get; set; }
+        public decimal volume_24h { get; set; }
+        public decimal last_price_24h { get; set; }
+        public decimal last_traded_price { get; set; }
+        public decimal last_traded_quantity { get; set; }
+        //public float last_traded_price { get; set; }
+        //public float last_traded_quantity { get; set; }
+        public string quoted_currency { get; set; }
+        public string base_currency { get; set; }
+        public bool disabled { get; set; }
+        public decimal exchange_rate { get; set; }
+    }
 
+    public class QryptosBidAsk
+    {
+        public decimal[][] buy_price_levels { get; set; }
+        public decimal[][] sell_price_levels { get; set; }
+    }
+
+    ////public class QryptosErrorMsg
+    ////{
+    ////    public string message { get; set; }
+    ////}
     #endregion 
 
     #endregion

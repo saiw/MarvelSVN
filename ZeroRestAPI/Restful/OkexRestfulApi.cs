@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* Create
+ * Author :Joqq Lin
+ * DATE   :2018-03-30
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +24,7 @@ namespace ZeroRestAPI
         public OKexBidAsk BidAsk { get; private set; }
 
         public OkexRestfulApi() { }
-
-        #region Method
+        
 
         public override void Clear()
         {
@@ -58,7 +61,6 @@ namespace ZeroRestAPI
 
             }
         }
-        #endregion 
         
         #region Excel 
         public override decimal GetAsk()
@@ -83,10 +85,12 @@ namespace ZeroRestAPI
 
         public override decimal GetClose()
         {
-            decimal close = 0m;
-            if (this.Price != null)
-                return decimal.TryParse(Price.OKexticker.last, out close) ? close : 0m;
-            return close;
+            return Price.OKexticker != null ? Price.OKexticker.last : 0m;
+
+            //decimal close = 0m;
+            //if (this.Price != null)
+            //    return decimal.TryParse(Price.OKexticker.last, out close) ? close : 0m;
+            //return close;
         }
 
         public override string GetErrorCode()

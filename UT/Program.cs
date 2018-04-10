@@ -11,18 +11,22 @@ namespace APITest
             Console.WriteLine("Hello World!");
             ApiTests test = new ApiTests();
 
-            Console.WriteLine("========Test GetBifinexDetail  =========");
-            test.GetBifinexDetail();
-            
-            //Console.WriteLine("========Test GetHitBtcDetail  =========");
-            //test.GetHitBtcDetail();
-            //Console.WriteLine("========Test GetOkexCoinDetail=========");
-            //test.GetOkexCoinDetail();
-            //test.GetBinanceDetail();
-            //Console.WriteLine("========Test GeKuCoinRestfulApi  =========");
-            //test.GetKuCoinDetail();
-            //test.GetMaketDeatil();
+            Console.WriteLine("======== Qryptos =========");
+            test.GetQryptosDetail();
 
+            //Console.WriteLine("======== Bifinex =========");
+            //test.GetBifinexDetail();
+            //Console.WriteLine("======== HitBtc =========");
+            //test.GetHitBtcDetail();
+            //Console.WriteLine("======== OkexCoin =========");
+            //test.GetOkexCoinDetail();
+
+            //Console.WriteLine("======== BinanceDetail =========");
+            //test.GetBinanceDetail();
+            //Console.WriteLine("======== KuCoinRestfulApi =========");
+            //test.GetKuCoinDetail();
+            //Console.WriteLine("======== Huobi =========");
+            //test.GetHuobiDeatil();
             Console.WriteLine("press any key to exit");
             Console.ReadKey();
         }
@@ -31,13 +35,19 @@ namespace APITest
     public class ApiTests
     {
 
-        /* 1.api = new HuobiApi(網域)
-         *   vba 使用  api = new HuobiApi()
-                       api.HoubitHOST = "api.huobipro.com";
-                       api.Init();
-         * 2.api.SendRequest(path, param) ex:( /market/detail/merged , ekobtc)
-         * 3.GetClose / GetBid(0) ->Bid price ; 
-         *              GetBid(1) ->Bid Vol   ; ask 同理
+        /*  vba 使用  
+         * 1.api = new HuobiApi(網域)
+         *   api.HoubitHOST = "api.huobipro.com";
+             api.TokenCoin = "EOSBTC";
+             api.ResourcePath = $"/v2/tickers";
+
+             (若行情需要Call兩個以上restful才能取得; 請指定ResourcePath2 =>api.SecondURL)
+             api.ResourcePath2 = "/api/v1/depth.do";
+
+         * 2.api.SendRequest(api.URL)                               ex:( /market/detail/merged , ekobtc)
+         *   api.SendCombineRequest(api.URL, api.SecondURL)  =>若行情需要
+         *   
+         * 3.api.Clear();  =>連續要求 ;要求前需要Clear 內存值 ( api.URL , api.TokenCoin  )  
          */
         [TestMethod()]
         public void GetBifinexDetail()
@@ -73,16 +83,16 @@ namespace APITest
             api.SendCombineRequest(api.URL, api.SecondURL);
             Print(api);
 
-            api.Clear();
-            //api.Dispose();
+            //api.Clear();
+            ////api.Dispose();
 
-            api.TokenCoin = "LTCBTC";
-            api.ResourcePath = $"/api/1/public/{api.TokenCoin}/ticker";
-            Console.WriteLine(api.URL);                                //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
-            api.ResourcePath2 = $"/api/1/public/{api.TokenCoin}/orderbook";
-            Console.WriteLine(api.SecondURL);                          //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
-            api.SendCombineRequest(api.URL, api.SecondURL);
-            Print(api);
+            //api.TokenCoin = "LTCBTC";
+            //api.ResourcePath = $"/api/1/public/{api.TokenCoin}/ticker";
+            //Console.WriteLine(api.URL);                                //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
+            //api.ResourcePath2 = $"/api/1/public/{api.TokenCoin}/orderbook";
+            //Console.WriteLine(api.SecondURL);                          //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
+            //api.SendCombineRequest(api.URL, api.SecondURL);
+            //Print(api);
 
 
         }
@@ -92,7 +102,17 @@ namespace APITest
             OkexRestfulApi api = new OkexRestfulApi();
             api.Host = "www.okex.com";
 
-            //api.TokenCoin = "ltc_btc";
+            api.TokenCoin = "ltc_btc";
+            api.ResourcePath = "/api/v1/ticker.do";
+            Console.WriteLine(api.URL);                  //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
+            api.ResourcePath2 = "/api/v1/depth.do";
+            Console.WriteLine(api.SecondURL);           //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
+            api.SendCombineRequest(api.URL, api.SecondURL);
+            Print(api);
+
+            api.Clear();
+
+            //api.TokenCoin = "bkx_eth";
             //api.ResourcePath = "/api/v1/ticker.do";
             //Console.WriteLine(api.URL);                  //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
             //api.ResourcePath2 = "/api/v1/depth.do";
@@ -100,23 +120,15 @@ namespace APITest
             //api.SendCombineRequest(api.URL, api.SecondURL);
             //Print(api);
 
-            api.Clear();
-            api.TokenCoin = "bkx_eth";
-            api.ResourcePath = "/api/v1/ticker.do";
-            Console.WriteLine(api.URL);                  //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
-            api.ResourcePath2 = "/api/v1/depth.do";
-            Console.WriteLine(api.SecondURL);           //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
-            api.SendCombineRequest(api.URL, api.SecondURL);
-            Print(api);
+            //api.Clear();
 
-            api.Clear();
-            api.TokenCoin = "bch_btc";
-            api.ResourcePath = "/api/v1/ticker.do";
-            Console.WriteLine(api.URL);                  //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
-            api.ResourcePath2 = "/api/v1/depth.do";
-            Console.WriteLine(api.SecondURL);           //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
-            api.SendCombineRequest(api.URL, api.SecondURL);
-            Print(api);
+            //api.TokenCoin = "bch_btc";
+            //api.ResourcePath = "/api/v1/ticker.do";
+            //Console.WriteLine(api.URL);                  //https://www.okex.com/api/v1/ticker.do?symbol=ltc_btc
+            //api.ResourcePath2 = "/api/v1/depth.do";
+            //Console.WriteLine(api.SecondURL);           //https://www.okex.com/api/v1/depth.do?symbol=ltc_btc
+            //api.SendCombineRequest(api.URL, api.SecondURL);
+            //Print(api);
 
         }
         [TestMethod()]
@@ -182,7 +194,7 @@ namespace APITest
 
         }
         [TestMethod()]
-        public void GetMaketDeatil()
+        public void GetHuobiDeatil()
         {
             HuobiRestfulApi api = new HuobiRestfulApi();
             api.Host = "api.huobipro.com";
@@ -247,7 +259,37 @@ namespace APITest
             //api.Clear();
             //result = api.SendRequest(path, param);
             //Print(api);
-        }       
+        }
+
+
+        [TestMethod()]
+        public void GetQryptosDetail()
+        {
+            QryptosRestfulApi api = new QryptosRestfulApi(); 
+            api.Host = "api.quoine.com";
+
+            api.ID = "52"; // token
+            api.ResourcePath = $"/products/{api.ID}";                 // https://api.quoine.com/products/75
+            Console.WriteLine(api.URL);                 
+            api.ResourcePath2 = $"/products/{api.ID}/price_levels";   // https://api.quoine.com/products/75/price_levels
+            Console.WriteLine(api.SecondURL);           
+            api.SendCombineRequest(api.URL, api.SecondURL);
+            Print(api);
+
+            api.Clear();
+
+            api.ID = "37"; // token
+            api.ResourcePath = $"/products/{api.ID}";                 // https://api.quoine.com/products/75
+            Console.WriteLine(api.URL);
+            api.ResourcePath2 = $"/products/{api.ID}/price_levels";   // https://api.quoine.com/products/75/price_levels
+            Console.WriteLine(api.SecondURL);
+            api.SendCombineRequest(api.URL, api.SecondURL);
+            Print(api);
+
+
+        }
+
+
         [TestMethod()]
         public void GetOKCoinDetail()
         {
@@ -262,7 +304,7 @@ namespace APITest
 
             ////Console.WriteLine(api.Contect);
         }
-        
+
         public void Print(AbstractRestful api)
         {
             if (api.IsError)
@@ -271,10 +313,19 @@ namespace APITest
                 Console.WriteLine($"Ask  ={api.GetAsk()}  ;Vol=[{api.GetAskVol()}],\n" +
                                   $"Close={api.GetClose()};\n" +
                                   $"Bid  ={api.GetBid()}  ;Vol=[{api.GetBidVol()}],\n" +
-                                  $"------{ api.LastRevTime}--{api.TokenCoin}--\n");
+                                  $"{ api.LastRevTime}" +
+                                  $"-------------------{ api.TokenCoin}\n");
 
-            //Console.WriteLine(api.Contect);
-            //Console.Write($"{api.LastRevTime}\n");
+
+            //Console.WriteLine($"Ask_3  ={api.GetAsk(2)} ;\n" +
+            //                  $"Ask_2  ={api.GetAsk} ;\n" +
+            //                  $"Ask_1  ={api.GetAsk()} ;\n");
+            //$"Bid_1  ={api.GetAsk()} ;\n" +
+            //$"Bid_2  ={api.GetAsk(1)} ;\n" +
+            //$"Bid_3  ={api.GetAsk(2)} ;\n" ); 
+
+                //Console.WriteLine(api.Contect);
+                //Console.Write($"{api.LastRevTime}\n");
 
         }
 

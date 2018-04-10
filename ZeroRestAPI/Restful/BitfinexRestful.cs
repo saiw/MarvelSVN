@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* Create
+ * Author :Joqq Lin
+ * DATE   :2018-03-30
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,12 +15,12 @@ namespace ZeroRestAPI
      /// </summary>
     public class BitfinexRestful : AbstractRestful
     {
-
-
         public override string URL => $"{HOSTURL}{ResourcePath}?symbols=t{TokenCoin}"; //https://api.bitfinex.com/v2/tickers?symbols=tEOSETH
-
         private string[] Price;
-        //private BitFinexPrice Price;
+        public BitfinexRestful() { }
+
+
+
         public override void Clear()
         {
             Price = null;
@@ -25,8 +29,6 @@ namespace ZeroRestAPI
             isError = false;
             errorCode = string.Empty;
         }
-
-
         public override void Parse(string msg)
         {
             /// how to parse 
@@ -45,9 +47,9 @@ namespace ZeroRestAPI
             contect = ToJsonFormat(msg);
 
         }
-        public BitfinexRestful() { }
 
-        #region Method 
+
+        #region Excel 
         public override decimal GetAsk()
         {
             return this.Price!=null ? decimal.Parse(Price[(int)Bitfinex.Tick.ASK]) :0m ;

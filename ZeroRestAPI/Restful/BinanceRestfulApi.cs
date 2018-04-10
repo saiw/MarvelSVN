@@ -10,13 +10,17 @@ using System.Threading.Tasks;
 
 namespace ZeroRestAPI
 {
+    /// <summary>
+    /// URL         :https://www.binance.com/
+    /// API Refrence:https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md
+    /// </summary>
     public class BinanceRestfulApi : AbstractRestful
     {
-        //https://api.binance.com/api/v1/ticker/24hr?symbol=LTCBTC
-        public override string URL => $"{HOSTURL}{ResourcePath}?symbol={TokenCoin}";
+        public override string URL => $"{HOSTURL}{ResourcePath}?symbol={TokenCoin}";    //https://api.binance.com/api/v1/ticker/24hr?symbol=LTCBTC
 
         public BinancePriceStatus Price { get; private set; }
         private BinanceError errMsg;
+
         public BinanceRestfulApi()
         { }
 
@@ -28,8 +32,6 @@ namespace ZeroRestAPI
             isError = false;
             errorCode = string.Empty;
         }
-
-
         public override void Parse(string msg)
         {
             contect = ToJsonFormat(msg);
@@ -51,52 +53,58 @@ namespace ZeroRestAPI
             }
         }
 
-
         #region  Excel 
 
 
         public override decimal GetAsk()
         {
-            decimal ask = 0m;
-            if (this.Price != null)
-                return decimal.TryParse(Price.askPrice, out ask) ? ask : 0m;
+            return Price != null ? Price.askPrice : 0m;
 
-            return ask;
+
+            //if (this.Price != null)
+            //    return decimal.TryParse(Price.askPrice, out ask) ? ask : 0m;
+
         }
 
         public override decimal GetAskVol()
         {
-            decimal aVol = 0m;
-            if (this.Price != null)
-                return decimal.TryParse(Price.askQty, out aVol) ? aVol : 0m;
+            return Price != null ? Price.askQty : 0m;
 
-            return aVol;
+            //decimal aVol = 0m;
+            //if (this.Price != null)
+            //    return decimal.TryParse(Price.askQty, out aVol) ? aVol : 0m;
+
+            //return aVol;
         }
 
         public override decimal GetBid()
         {
-            decimal bid = 0m;
-            if (this.Price != null)
-                return decimal.TryParse(Price.bidPrice, out bid) ? bid : 0m;
+            return Price != null ? Price.bidPrice : 0m;
 
-            return bid;
+            //decimal bid = 0m;
+            //if (this.Price != null)
+            //    return decimal.TryParse(Price.bidPrice, out bid) ? bid : 0m;
+
+            //return bid;
         }
 
         public override decimal GetBidVol()
         {
-            decimal vol = 0m;
-            if (this.Price != null)
-                return decimal.TryParse(Price.bidQty, out vol) ? vol : 0m;
+            return Price != null ? Price.bidQty : 0m;
 
-            return vol;
+            //decimal vol = 0m;
+            //if (this.Price != null)
+            //    return decimal.TryParse(Price.bidQty, out vol) ? vol : 0m;
+            //return vol;
         }
 
         public override decimal GetClose()
         {
-            decimal close  = 0m;
-            if (this.Price != null)
-                return decimal.TryParse(Price.lastPrice, out close) ? close : 0m;
-            return close;
+            return Price != null ? Price.lastPrice : 0m;
+            //decimal close  = 0m;
+            //if (this.Price != null)
+            //    return decimal.TryParse(Price.lastPrice, out close) ? close : 0m;
+            //return close;
         }
 
         public override string GetErrorCode()
